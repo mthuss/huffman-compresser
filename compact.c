@@ -3,12 +3,6 @@
 #include <stdlib.h>
 #include "huffman.h"
 
-/*			ATENÇÃO ATENÇÃO
-  O PROGRAMA PARECE FUNCIONAR BEM PARA ARQUIVOS PEQUENOS,
-  MAS ESTÁ DANDO PROBLEMAS NA FUNÇÃO DE PEGAR O TAMANHO DA FRASE CODIFICADA
-  PARA ARQUIVOS DE TEXTO MAIORES*/
-//PELO VISTO NÃO MAIS???? NÃO MUDEI NADA
-
 int main(int argc,char** argv)
 {
 	FILE* arq;
@@ -20,16 +14,13 @@ int main(int argc,char** argv)
 
 	opt = argumentos(argc,argv);
 
-	if(!abrirInput(&arq, argv[2], &tam))
+	if(!abrirInput(&arq, argv[2], &tam, opt))
 		return 1;
 
 	if(opt == 1) //Compressão
 	{
 		frase = malloc(tam + 1);
-//		fgets(frase, tam + 1, arq);
 		fread(frase, 1, tam + 1, arq);
-		printf("informações do arquivo:\n- tamanho em bytes: %d\n- conteúdo: %s\n\n",tam,frase);
-//		printf("tam: %d\nstrlen: %d\n",tam,strlen(frase));
 
 		//Primeiro passo:
 		//Criar uma lista de árvores ordenada por peso
@@ -58,8 +49,6 @@ int main(int argc,char** argv)
 		int tamCod = tamCodificada(frase,dicionario);
 		char* fraseCodificada = malloc(tamCod + (8 - tamCod % 8) + 1); //aloca memoria pra string de tamanho multiplo de 8
 		codificar(frase, fraseCodificada, dicionario, tamCod);
-	//	printf("frase codificada: %s\ntamanho: %d\nem bytes: %d\n",fraseCodificada,strlen(fraseCodificada),strlen(fraseCodificada)/8);
-		printf("%s\n",fraseCodificada);
 
 		//Quinto passo:
 		//abre o arquivo para escrita, 
@@ -71,8 +60,8 @@ int main(int argc,char** argv)
 			printf("Ocorreu um erro ao criar o arquivo de saída!!\n");
 			return 1;
 		}
+		else printf("%s > %s\n",argv[2],nomeOutput(argv[2],1));
 		imprimeHuf(output,fraseCodificada,qtdChars,tamCod,freq);
-//		imprimirCodigos(dicionario);	
 
 
 		fclose(arq);
@@ -92,13 +81,12 @@ int main(int argc,char** argv)
 		int numBits;
 		fscanf(arq,"%d",&numBits);
 		fgetc(arq); //lê o \n
-		printf("numBits: %d\n");
 
+		//pega os caracteres do arquivo, transforma-os em blocos de 8 bits
+		//e junta todos numa string fraseCodificada
+		char* fraseCodificada = malloc(numBits + (8 - numBits % 8) + 1);
 		int pos = 0;
 		char codigo[9];
-		char* fraseCodificada = malloc(numBits + (8 - numBits % 8) + 1);
-		int size = ceil(numBits / 8.0);
-		printf("size: %d\n",size);
 		while(!feof(arq))
 		{
 			convert(fgetc(arq),codigo);	
@@ -106,13 +94,21 @@ int main(int argc,char** argv)
 				break;
 			strcat(fraseCodificada,codigo);
 		}
-//		printf("%s\n%d\n",fraseCodificada,strlen(fraseCodificada));
 		
-		int len = strlen(nomeArquivo(argv[2]));
-		
+		//abre o arquivo de saída e faz a descodificação da string, imprimindo-a no arquivo
 		output = fopen(nomeOutput(argv[2],2),"w+");
+		if(!output)
+		{
+			printf("Ocorreu um erro ao criar o arquivo de saída!!\n");
+			return 1;
+		}
+		else printf("%s > %s\n",argv[2],nomeOutput(argv[2],2));
+
 		while(pos < numBits)
 			fputc(decodificar(arvoreHuffman,fraseCodificada,&pos,pos),output);
+
+		fclose(arq);
+		fclose(output);
 
 	}
 
