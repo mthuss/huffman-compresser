@@ -20,9 +20,9 @@ int argumentos(int argc, char** argv)
 		return 1;
 	}
 
-	if(strcmp(argv[1],"--compactar") == 0 || strcmp(argv[1],"-c") == 0)
+	if(strcmp(argv[1],"--comprimir") == 0 || strcmp(argv[1],"-c") == 0)
 		return 1;
-	else if(strcmp(argv[1],"--descompactar") == 0 || strcmp(argv[1],"-d") == 0)
+	else if(strcmp(argv[1],"--descomprimir") == 0 || strcmp(argv[1],"-d") == 0)
 		return 2;
 	else 
 		return 0;

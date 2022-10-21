@@ -17,6 +17,13 @@ int main(int argc,char** argv)
 	if(!abrirInput(&arq, argv[2], &tam, opt))
 		return 1;
 
+	if(opt == 0)
+	{
+		printf("Argumento inválido!!\n\n");
+		printf("Uso do programa:\n./programa -c arquivo.txt\n\t  ou\n./programa -d arquivo.txt\n");
+		return 1;
+	}
+
 	if(opt == 1) //Compressão
 	{
 		frase = malloc(tam + 1);
