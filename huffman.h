@@ -25,8 +25,9 @@ typedef struct codigo
 
 
 int argumentos(int argc, char** argv);
-int abrirArquivo(FILE** arq, char* nome, int* tam, char** frase);
+int abrirInput(FILE** arq, char* nome, int* tam);
 char* nomeArquivo(char* nomeComExt);
+char* nomeOutput(char* nome, int tipo);
 int* calculaFrequencias(char* frase);
 int calculaQuantidade(int* freq);
 Lista* criarNo(char c, int freq);
@@ -38,6 +39,10 @@ void montarDicionario(Arvore* no, char* codigo, int topo, Codigo** dicionario);
 char* pegaCodigo(Codigo* dicionario, char c);
 int tamCodificada(char* frase, Codigo* dicionario);
 void codificar(char* frase, char* fraseCodificada, Codigo* dicionario, int tam);
+
+void lerTabelaFreq(FILE* arq, Lista** listaArvores, int qtdChars);
+int pegaTam(FILE* arq);
+char decodificar(Arvore* no, char* frase, int* abspos, int pos);
 
 //funcoes de conversao
 char convert_byte ( char * vet , int n );

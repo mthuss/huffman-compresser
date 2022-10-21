@@ -31,19 +31,38 @@ int argumentos(int argc, char** argv)
 
 char* nomeArquivo(char* nomeComExt)
 {
-	int cont = 0;
+	int cont = strlen(nomeComExt) - 1;
 	char* nomeSemExt;
 	while(nomeComExt[cont] != '.')
-		cont++;
+		cont--;
 
-	nomeSemExt = malloc(cont+5); //tamanho + 4 bytes de ".huf"/".txt" + h
+	nomeSemExt = malloc(cont+1); 
 	for(int i = 0; i < cont; i++)
 		nomeSemExt[i] = nomeComExt[i];
 
 	return nomeSemExt;
 }
 
-int abrirArquivo(FILE** arq, char* nome, int* tam, char** frase)
+char* nomeOutput(char* nome, int tipo)
+{
+	char* nomeSemExt = nomeArquivo(nome);
+	char* output;
+
+	if(tipo == 1) //output da compressão
+	{
+		output = malloc(strlen(nomeSemExt) + 5); //tamanho + 4 bytes de ".huf"/".txt" + '\0'
+		output = strcat(nomeSemExt,".huf");
+		return output;
+	}
+	if(tipo == 2) // output da descompressão
+	{
+		output = malloc(strlen(nomeSemExt) + 18);
+		output = strcat(nomeSemExt,"_decompressed.txt");
+		return output;
+	}
+}
+
+int abrirInput(FILE** arq, char* nome, int* tam)
 {
 	*arq = fopen(nome,"r");
 	if(!(*arq))
@@ -56,7 +75,6 @@ int abrirArquivo(FILE** arq, char* nome, int* tam, char** frase)
 	fseek(*arq, 0L, SEEK_END);
 	*tam = ftell(*arq);
 	rewind(*arq);
-	*frase = malloc(*tam+1);
 
 	if(*tam == 0)
 	{
@@ -284,17 +302,42 @@ void imprimeHuf(FILE* out, char* fraseCodificada, int qtdChars, int tamCod, int*
 
 	fprintf(out,"%d\n",tamCod);
 
-	for(i = 0; i < strlen(fraseCodificada); i++)
+	for(i = 0; i <= strlen(fraseCodificada); i++)
 	{
 
-		binario[i % 8] = fraseCodificada[i];
-		if(i != 0 && i % 7 == 0)
+		if(i != 0 && i % 8 == 0)
 		{
-	//		printf("frase: %s\n",binario);
+			//printf("%s",binario);
 			fputc(convert_byte(binario,8),out);
 		}
+		binario[i % 8] = fraseCodificada[i];
 	}
 		
+}
+
+//funções para descompressão:
+void lerTabelaFreq(FILE* arq, Lista** listaArvores, int qtdChars)
+{
+	int freq;
+	char c;
+	for(int i = 0; i < qtdChars; i++)
+	{
+		c = fgetc(arq);
+		fgetc(arq); //lê o espaço em branco
+		fscanf(arq,"%d",&freq);
+		fgetc(arq); //lê o \n
+		inserirLista(listaArvores,criarNo(c,freq));
+	}
+
+}
+
+int pegaTam(FILE* arq)
+{
+	int tam = 0;
+	while(fgetc(arq) != '\n')
+		tam++;
+	rewind(arq);
+	return tam;
 }
 
 void imprimir(Lista* lista)
@@ -314,3 +357,22 @@ void imprimirCodigos(Codigo* dicio)
 		dicio = dicio->prox;
 	}
 }
+
+char decodificar(Arvore* no, char* frase, int* abspos, int pos)
+{
+	if(!(no->esq || no->dir)) //é folha
+	{
+		*abspos = pos; //atualiza a posição absoluta em relação à string frase
+		return no->simbolo;
+	}
+
+	if(frase[pos] == '0')
+	{
+		return decodificar(no->esq, frase, abspos,pos+1);
+	}
+	if(frase[pos] == '1')
+	{
+		return decodificar(no->dir, frase, abspos, pos+1);
+	}
+}
+
