@@ -30,10 +30,10 @@ int argumentos(int argc, char** argv)
 }
 
 //Retorna o nome do arquivo sem a extensão
-char* nomeArquivo(char* nomeComExt)
+unsigned char* nomeArquivo(unsigned char* nomeComExt)
 {
 	int cont = strlen(nomeComExt) - 1;
-	char* nomeSemExt;
+	unsigned char* nomeSemExt;
 	while(nomeComExt[cont] != '.')
 		cont--;
 
@@ -45,16 +45,16 @@ char* nomeArquivo(char* nomeComExt)
 }
 
 //Retorna a extensão do arquivo
-char* extArquivo(char* nomeComExt)
+unsigned char* extArquivo(unsigned char* nomeComExt)
 {
 	return strrchr(nomeComExt,'.');
 }
 
 //Retorna o nome que deve ser usado para o arquivo de output
-char* nomeOutput(char* nome, int tipo)
+unsigned char* nomeOutput(unsigned char* nome, int tipo)
 {
-	char* nomeSemExt = nomeArquivo(nome);
-	char* output;
+	unsigned char* nomeSemExt = nomeArquivo(nome);
+	unsigned char* output;
 
 	if(tipo == 1) //output da compressão
 	{
@@ -71,7 +71,7 @@ char* nomeOutput(char* nome, int tipo)
 }
 
 //Abre o arquivo de input e faz as checagens necessárias
-int abrirInput(FILE** arq, char* nome, int* tam, int opt)
+int abrirInput(FILE** arq, unsigned char* nome, int* tam, int opt)
 {
 	*arq = fopen(nome,"r");
 	if(!(*arq))
@@ -99,11 +99,11 @@ int abrirInput(FILE** arq, char* nome, int* tam, int opt)
 }
 
 //Calcula e retorna a frequencia de todos os caracteres que aparecem no arquivo
-int* calculaFrequencias(char* frase)
+int* calculaFrequencias(unsigned char* frase)
 {
 	//Inicializa a matriz
-	int* freq = malloc(128*sizeof(int));
-	memset(freq,0,128*sizeof(int));
+	int* freq = malloc(256*sizeof(int));
+	memset(freq,0,256*sizeof(int));
 
 	for(int i = 0; i < strlen(frase); i++)
 		freq[frase[i]]++;
@@ -115,7 +115,7 @@ int* calculaFrequencias(char* frase)
 int calculaQuantidade(int* freq)
 {
 	int cont = 0;
-	for(int i = 0; i < 128; i++)
+	for(int i = 0; i < 256; i++)
 		if(freq[i] > 0)
 			cont++;
 			
@@ -123,7 +123,7 @@ int calculaQuantidade(int* freq)
 }
 
 //Cria um nó de lista contendo uma nova árvore com simbolo c e peso freq
-Lista* criarNo(char c, int freq)
+Lista* criarNo(unsigned char c, int freq)
 {
 	Arvore* arv = malloc(sizeof(Arvore));
 	Lista* no = malloc(sizeof(Lista));
@@ -171,7 +171,7 @@ void inserirLista(Lista** lista, Lista* novo)
 //Cria todas as árvores de nó unico a partir da lista de frequencia e as insere na lista de árvores
 void criarListaArvores(Lista** lista, int* freq)
 {
-	for(int i = 0; i < 128; i++)
+	for(int i = 0; i < 256; i++)
 		if(freq[i] > 0)
 			inserirLista(lista,criarNo(i,freq[i]));
 }
@@ -204,14 +204,13 @@ Arvore* arvoriza(Lista** listaArvores)
 }
 
 //Insere um código no dicionario de códigos
-void inserirCodigo(Codigo** dicionario, char* codigo, char simbolo)
+void inserirCodigo(Codigo** dicionario, unsigned char* codigo, unsigned char simbolo)
 {
 	Codigo* novo = malloc(sizeof(Codigo));
 	novo->simbolo = simbolo;
 	novo->codigo = codigo;
 	novo->prox = NULL;
 
-//	printf("Codigo atual: %s (%d)\n",novo->codigo,strlen(novo->codigo));
 	if(*dicionario == NULL)
 	{
 		*dicionario = novo;
@@ -229,7 +228,7 @@ void inserirCodigo(Codigo** dicionario, char* codigo, char simbolo)
 }
 
 //Atribui códigos a cada um dos caracteres presentes na árvore e os insere no dicionário
-void montarDicionario(Arvore* no, char* codigo, int topo, Codigo** dicionario)
+void montarDicionario(Arvore* no, unsigned char* codigo, int topo, Codigo** dicionario)
 {
 	if(no->esq)
 	{
@@ -244,14 +243,13 @@ void montarDicionario(Arvore* no, char* codigo, int topo, Codigo** dicionario)
 	if(!(no->esq || no->dir)) //é folha
 	{
 		codigo[topo] = '\0';
-//		printf("codigo: %s\n",codigo);
 		inserirCodigo(dicionario, strcpy(malloc(topo),codigo), no->simbolo);
 	}
 
 }
 
-//retorna a forma codificada do char c
-char* pegaCodigo(Codigo* dicionario, char c)
+//retorna a forma codificada do unsigned char c
+unsigned char* pegaCodigo(Codigo* dicionario, unsigned char c)
 {
 	while(dicionario)
 	{
@@ -265,7 +263,7 @@ char* pegaCodigo(Codigo* dicionario, char c)
 }
 
 //retorna o tamanho total a ser ocupada pela frase em forma codificada
-int tamCodificada(char* frase, Codigo* dicionario)
+int tamCodificada(unsigned char* frase, Codigo* dicionario)
 {
 	int tam = 0;
 	for(int i = 0; i < strlen(frase); i++)
@@ -274,7 +272,7 @@ int tamCodificada(char* frase, Codigo* dicionario)
 }
 
 //Traduz a frase lida do arquivo para sua forma codificada, salvando-a na string fraseCodificada
-void codificar(char* frase, char* fraseCodificada, Codigo* dicionario, int tam)
+void codificar(unsigned char* frase, unsigned char* fraseCodificada, Codigo* dicionario, int tam)
 {
 	int i;
 	for(i = 0; i < strlen(frase); i++)
@@ -287,9 +285,9 @@ void codificar(char* frase, char* fraseCodificada, Codigo* dicionario, int tam)
 }
 
 //Converte um vetor de bits em um único byte
-char convert_byte ( char * vet , int n )
+unsigned char convert_byte ( unsigned char * vet , int n )
 {
-	char rtno = 0 ,
+	unsigned char rtno = 0 ,
 	     i = 0;
 	while ( i < n )
 	{
@@ -301,7 +299,7 @@ char convert_byte ( char * vet , int n )
 }
 
 //Converte um byte em um vetor de bits
-void convert ( char ch , char * Vet )
+void convert ( unsigned char ch , unsigned char * Vet )
 {
 	int i = 7;
 	// indice auxiliar
@@ -317,13 +315,13 @@ void convert ( char ch , char * Vet )
 }
 
 //Imprime as informação no arquivo de saída codificado
-void imprimeHuf(FILE* out, char* fraseCodificada, int qtdChars, int tamCod, int* freq)
+void imprimeHuf(FILE* out, unsigned char* fraseCodificada, int qtdChars, int tamCod, int* freq)
 {
 	int i = 0, j = 0;
-	char binario[9];
+	unsigned char binario[9];
 	fprintf(out,"HUFFMAN 1.0\n%d\n",qtdChars);
 
-	for(i = 0 ; i < 128; i++)
+	for(i = 0 ; i < 256; i++)
 		if(freq[i] > 0)
 			fprintf(out,"%c %d\n",i,freq[i]);
 
@@ -334,7 +332,6 @@ void imprimeHuf(FILE* out, char* fraseCodificada, int qtdChars, int tamCod, int*
 
 		if(i != 0 && i % 8 == 0)
 		{
-			//printf("%s",binario);
 			fputc(convert_byte(binario,8),out);
 		}
 		binario[i % 8] = fraseCodificada[i];
@@ -346,7 +343,7 @@ void imprimeHuf(FILE* out, char* fraseCodificada, int qtdChars, int tamCod, int*
 void lerTabelaFreq(FILE* arq, Lista** listaArvores, int qtdChars)
 {
 	int freq;
-	char c;
+	unsigned char c;
 	for(int i = 0; i < qtdChars; i++)
 	{
 		c = fgetc(arq);
@@ -359,7 +356,7 @@ void lerTabelaFreq(FILE* arq, Lista** listaArvores, int qtdChars)
 }
 
 //Lê a frase codificada lida do arquivo huf e converte de volta à sua forma original
-char decodificar(Arvore* no, char* frase, int* abspos, int pos)
+unsigned char decodificar(Arvore* no, unsigned char* frase, int* abspos, int pos)
 {
 	if(!(no->esq || no->dir)) //é folha
 	{
@@ -376,4 +373,3 @@ char decodificar(Arvore* no, char* frase, int* abspos, int pos)
 		return decodificar(no->dir, frase, abspos, pos+1);
 	}
 }
-

@@ -3,13 +3,13 @@
 #include <stdlib.h>
 #include "huffman.h"
 
-int main(int argc,char** argv)
+int main(int argc, char** argv)
 {
 	FILE* arq;
 	FILE* output;
 	int opt, i;
 	int tam, qtdChars;
-	char* frase;
+	unsigned char* frase;
 	int* freq;
 
 	opt = argumentos(argc,argv);
@@ -48,13 +48,13 @@ int main(int argc,char** argv)
 		//Terceiro passo:
 		//montar o dicionário de codificação
 		Codigo* dicionario = NULL;
-		char codigo[9];
+		unsigned char codigo[9];
 		montarDicionario(arvoreHuffman, codigo, 0, &dicionario);
 
 		//Quarto passo:
 		//converter a frase do arquivo para o formato codificado
 		int tamCod = tamCodificada(frase,dicionario);
-		char* fraseCodificada = malloc(tamCod + (8 - tamCod % 8) + 1); //aloca memoria pra string de tamanho multiplo de 8
+		unsigned char* fraseCodificada = malloc(tamCod + (8 - tamCod % 8) + 1); //aloca memoria pra string de tamanho multiplo de 8
 		codificar(frase, fraseCodificada, dicionario, tamCod);
 
 		//Quinto passo:
@@ -76,7 +76,7 @@ int main(int argc,char** argv)
 	}
 	if(opt == 2) //descompressão
 	{
-		char c;
+		unsigned char c;
 		//Lê o arquivo e reconstroi a árvore de codificação
 		fscanf(arq, "HUFFMAN 1.0\n%d",&qtdChars);
 		fgetc(arq); //lê o \n
@@ -91,9 +91,9 @@ int main(int argc,char** argv)
 
 		//pega os caracteres do arquivo, transforma-os em blocos de 8 bits
 		//e junta todos numa string fraseCodificada
-		char* fraseCodificada = malloc(numBits + (8 - numBits % 8) + 1);
+		unsigned char* fraseCodificada = malloc(numBits + (8 - numBits % 8) + 1);
 		int pos = 0;
-		char codigo[9];
+		unsigned char codigo[9];
 		while(!feof(arq))
 		{
 			convert(fgetc(arq),codigo);	
@@ -112,6 +112,7 @@ int main(int argc,char** argv)
 		else printf("%s > %s\n",argv[2],nomeOutput(argv[2],2));
 
 		fraseCodificada[numBits] = '\0';
+
 		while(pos < strlen(fraseCodificada))
 			fputc(decodificar(arvoreHuffman,fraseCodificada,&pos,pos),output);
 
