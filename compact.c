@@ -67,8 +67,8 @@ int main(int argc,char** argv)
 			printf("Ocorreu um erro ao criar o arquivo de saída!!\n");
 			return 1;
 		}
-		else printf("%s > %s\n",argv[2],nomeOutput(argv[2],1));
 		imprimeHuf(output,fraseCodificada,qtdChars,tamCod,freq);
+		printf("%s > %s\n",argv[2],nomeOutput(argv[2],1));
 
 		fclose(arq);
 		fclose(output);
