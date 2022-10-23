@@ -48,7 +48,7 @@ int main(int argc,char** argv)
 		//Terceiro passo:
 		//montar o dicionário de codificação
 		Codigo* dicionario = NULL;
-		char codigo[9];
+		char codigo[100];
 		montarDicionario(arvoreHuffman, codigo, 0, &dicionario);
 
 		//Quarto passo:
@@ -69,7 +69,6 @@ int main(int argc,char** argv)
 		}
 		else printf("%s > %s\n",argv[2],nomeOutput(argv[2],1));
 		imprimeHuf(output,fraseCodificada,qtdChars,tamCod,freq);
-
 
 		fclose(arq);
 		fclose(output);

@@ -32,6 +32,9 @@ int argumentos(int argc, char** argv)
 //Retorna o nome do arquivo sem a extensão
 unsigned char* nomeArquivo(unsigned char* nomeComExt)
 {
+	if(!strrchr(nomeComExt,'.')) //se o nome não tem pontos
+		return strcpy(malloc(strlen(nomeComExt)),nomeComExt);
+
 	int cont = strlen(nomeComExt) - 1;
 	unsigned char* nomeSemExt;
 	while(nomeComExt[cont] != '.')
@@ -240,7 +243,7 @@ void montarDicionario(Arvore* no, unsigned char* codigo, int topo, Codigo** dici
 		codigo[topo] = '1';
 		montarDicionario(no->dir, codigo, topo + 1, dicionario);
 	}
-	if(!(no->esq || no->dir)) //é folha
+	if(no->esq == NULL && no->dir == NULL) //é folha
 	{
 		codigo[topo] = '\0';
 		inserirCodigo(dicionario, strcpy(malloc(topo),codigo), no->simbolo);
@@ -372,4 +375,14 @@ unsigned char decodificar(Arvore* no, unsigned char* frase, int* abspos, int pos
 	{
 		return decodificar(no->dir, frase, abspos, pos+1);
 	}
+}
+void imprimirCodigos(Codigo* aux)
+{
+	printf("\n\nLista de Codigos:\n");
+	while(aux)
+	{
+		printf("Simbolo: %c\tCodigo: %s\n\n",aux->simbolo,aux->codigo);
+		aux = aux->prox;
+	}
+
 }

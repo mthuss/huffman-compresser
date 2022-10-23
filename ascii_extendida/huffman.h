@@ -24,6 +24,7 @@ typedef struct codigo
 //--------------------------------
 
 
+void imprimirCodigos(Codigo* aux);
 int argumentos(int argc, char** argv);
 int abrirInput(FILE** arq, unsigned char* nome, int* tam, int opt);
 unsigned char* nomeArquivo(unsigned char* nomeComExt);

@@ -32,6 +32,8 @@ int argumentos(int argc, char** argv)
 //Retorna o nome do arquivo sem a extensão
 char* nomeArquivo(char* nomeComExt)
 {
+	if(!strrchr(nomeComExt,'.'))
+		return strcpy(malloc(strlen(nomeComExt)),nomeComExt);
 	int cont = strlen(nomeComExt) - 1;
 	char* nomeSemExt;
 	while(nomeComExt[cont] != '.')

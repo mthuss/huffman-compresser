@@ -48,8 +48,9 @@ int main(int argc, char** argv)
 		//Terceiro passo:
 		//montar o dicionário de codificação
 		Codigo* dicionario = NULL;
-		unsigned char codigo[9];
-		montarDicionario(arvoreHuffman, codigo, 0, &dicionario);
+		unsigned char codigo[100];
+		int topo = 0;
+		montarDicionario(arvoreHuffman, codigo, topo, &dicionario);
 
 		//Quarto passo:
 		//converter a frase do arquivo para o formato codificado
@@ -67,8 +68,8 @@ int main(int argc, char** argv)
 			printf("Ocorreu um erro ao criar o arquivo de saída!!\n");
 			return 1;
 		}
-		else printf("%s > %s\n",argv[2],nomeOutput(argv[2],1));
 		imprimeHuf(output,fraseCodificada,qtdChars,tamCod,freq);
+		printf("%s > %s\n",argv[2],nomeOutput(argv[2],1));
 
 
 		fclose(arq);
