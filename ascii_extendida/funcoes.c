@@ -62,13 +62,17 @@ unsigned char* nomeOutput(unsigned char* nome, int tipo)
 	if(tipo == 1) //output da compressão
 	{
 		output = malloc(strlen(nomeSemExt) + 5); //tamanho + 4 bytes de ".huf"/".txt" + '\0'
-		output = strcat(nomeSemExt,".huf");
+		strcpy(output,nomeSemExt);
+		free(nomeSemExt);
+		strcat(output,".huf");
 		return output;
 	}
 	if(tipo == 2) // output da descompressão
 	{
 		output = malloc(strlen(nomeSemExt) + 18);
-		output = strcat(nomeSemExt,"_decompressed.txt");
+		strcpy(output,nomeSemExt);
+		free(nomeSemExt);
+		strcat(output,"_decompressed.txt");
 		return output;
 	}
 }
