@@ -57,6 +57,7 @@ int main(int argc, char** argv)
 		int tamCod = tamCodificada(frase,dicionario);
 		unsigned char* fraseCodificada = malloc(tamCod + (8 - tamCod % 8) + 1); //aloca memoria pra string de tamanho multiplo de 8
 		codificar(frase, fraseCodificada, dicionario, tamCod);
+		free(frase);
 
 		//Quinto passo:
 		//abre o arquivo para escrita, 
