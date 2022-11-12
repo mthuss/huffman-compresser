@@ -82,7 +82,7 @@ int abrirInput(FILE** arq, unsigned char* nome, int* tam, int opt)
 		printf("O arquivo especificado não existe!!\n\n");
 		return 0;
 	}
-	if(opt == 2 && strcmp(".huf",extArquivo(nome)) != 0)
+	if(opt == 2 && (!extArquivo(nome) || strcmp(".huf",extArquivo(nome)) != 0))
 	{
 		printf("Este arquivo não é do tipo .huf e não pode ser descomprimido.\n");
 		return 0;
@@ -316,15 +316,6 @@ void imprimeHuf(FILE* out, unsigned char* fraseCodificada, int qtdChars, int tam
 
 	fprintf(out,"%d\n",tamCod);
 
-//	for(i = 0; i <= strlen(fraseCodificada); i++)
-//	{
-//
-//		if(i != 0 && i % 8 == 0)
-//		{
-//			fputc(convert_byte(binario,8),out);
-//		}
-//		binario[i % 8] = fraseCodificada[i];
-//	}
 	for(i = 0; i <= strlen(fraseCodificada); i+=8)
 		fputc(convert_byte(&fraseCodificada[i],8),out);
 		
