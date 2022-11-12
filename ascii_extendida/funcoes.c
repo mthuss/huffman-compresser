@@ -316,15 +316,17 @@ void imprimeHuf(FILE* out, unsigned char* fraseCodificada, int qtdChars, int tam
 
 	fprintf(out,"%d\n",tamCod);
 
-	for(i = 0; i <= strlen(fraseCodificada); i++)
-	{
-
-		if(i != 0 && i % 8 == 0)
-		{
-			fputc(convert_byte(binario,8),out);
-		}
-		binario[i % 8] = fraseCodificada[i];
-	}
+//	for(i = 0; i <= strlen(fraseCodificada); i++)
+//	{
+//
+//		if(i != 0 && i % 8 == 0)
+//		{
+//			fputc(convert_byte(binario,8),out);
+//		}
+//		binario[i % 8] = fraseCodificada[i];
+//	}
+	for(i = 0; i <= strlen(fraseCodificada); i+=8)
+		fputc(convert_byte(&fraseCodificada[i],8),out);
 		
 }
 
