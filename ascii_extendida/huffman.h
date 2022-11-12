@@ -38,11 +38,9 @@ Lista* criarNo(unsigned char c, int freq);
 void inserirLista(Lista** lista, Lista* no);
 void criarListaArvores(Lista** lista, int* freq);
 Arvore* arvoriza(Lista** listaArvores);
-void inserirCodigo(Codigo** dicionario, unsigned char* codigo, unsigned char simbolo);
-void montarDicionario(Arvore* no, unsigned char* codigo, int topo, Codigo** dicionario);
-unsigned char* pegaCodigo(Codigo* dicionario, unsigned char c);
-int tamCodificada(unsigned char* frase, Codigo* dicionario);
-void codificar(unsigned char* frase, unsigned char* fraseCodificada, Codigo* dicionario, int tam);
+void montarDicionario(Arvore* no, unsigned char* codigo, int topo, char** dicionario);
+int tamCodificada(unsigned char* frase, char** dicionario);
+void codificar(unsigned char* frase, unsigned char* fraseCodificada, char** dicionario, int tam);
 
 void lerTabelaFreq(FILE* arq, Lista** listaArvores, int qtdChars);
 int pegaTam(FILE* arq);

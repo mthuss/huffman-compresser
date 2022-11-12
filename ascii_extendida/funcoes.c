@@ -231,7 +231,7 @@ void inserirCodigo(Codigo** dicionario, unsigned char* codigo, unsigned char sim
 }
 
 //Atribui códigos a cada um dos caracteres presentes na árvore e os insere no dicionário
-void montarDicionario(Arvore* no, unsigned char* codigo, int topo, Codigo** dicionario)
+void montarDicionario(Arvore* no, unsigned char* codigo, int topo, char** dicionario)
 {
 	if(no->esq)
 	{
@@ -246,40 +246,26 @@ void montarDicionario(Arvore* no, unsigned char* codigo, int topo, Codigo** dici
 	if(no->esq == NULL && no->dir == NULL) //é folha
 	{
 		codigo[topo] = '\0';
-		inserirCodigo(dicionario, strcpy(malloc(topo),codigo), no->simbolo);
+		dicionario[no->simbolo] = strcpy(malloc(topo),codigo);
 	}
-
-}
-
-//retorna a forma codificada do unsigned char c
-unsigned char* pegaCodigo(Codigo* dicionario, unsigned char c)
-{
-	while(dicionario)
-	{
-		if(dicionario->simbolo == c)
-			return dicionario->codigo;
-		dicionario = dicionario->prox;
-	}
-
-	return dicionario->codigo;
 
 }
 
 //retorna o tamanho total a ser ocupada pela frase em forma codificada
-int tamCodificada(unsigned char* frase, Codigo* dicionario)
+int tamCodificada(unsigned char* frase, char** dicionario)
 {
 	int tam = 0;
 	for(int i = 0; i < strlen(frase); i++)
-		tam += strlen(pegaCodigo(dicionario,frase[i]));
+		tam += strlen(dicionario[frase[i]]);
 	return tam;
 }
 
 //Traduz a frase lida do arquivo para sua forma codificada, salvando-a na string fraseCodificada
-void codificar(unsigned char* frase, unsigned char* fraseCodificada, Codigo* dicionario, int tam)
+void codificar(unsigned char* frase, unsigned char* fraseCodificada, char** dicionario, int tam)
 {
 	int i;
 	for(i = 0; i < strlen(frase); i++)
-		strcat(fraseCodificada,pegaCodigo(dicionario,frase[i]));
+		strcat(fraseCodificada,dicionario[frase[i]]);
 
 	//Completa a string com 0s para que seja de tamanho multiplo de 8
 	int max = (tam + (8 - tam % 8));

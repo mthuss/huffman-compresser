@@ -47,10 +47,10 @@ int main(int argc, char** argv)
 
 		//Terceiro passo:
 		//montar o dicionário de codificação
-		Codigo* dicionario = NULL;
+		char* dicionario[256];
 		unsigned char codigo[100];
 		int topo = 0;
-		montarDicionario(arvoreHuffman, codigo, topo, &dicionario);
+		montarDicionario(arvoreHuffman, codigo, topo, dicionario);
 
 		//Quarto passo:
 		//converter a frase do arquivo para o formato codificado
