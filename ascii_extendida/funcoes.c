@@ -79,7 +79,7 @@ int abrirInput(FILE** arq, unsigned char* nome, int* tam, int opt)
 	*arq = fopen(nome,"r");
 	if(!(*arq))
 	{
-		printf("O arquivo especificado não existe!!\n\n");
+		printf("O arquivo especificado não existe!!\n");
 		return 0;
 	}
 	if(opt == 2 && (!extArquivo(nome) || strcmp(".huf",extArquivo(nome)) != 0))

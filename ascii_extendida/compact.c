@@ -110,12 +110,13 @@ int main(int argc, char** argv)
 			printf("Ocorreu um erro ao criar o arquivo de saída!!\n");
 			return 1;
 		}
-		else printf("%s > %s\n",argv[2],nomeOutput(argv[2],2));
 
 		fraseCodificada[numBits] = '\0';
 
 		while(pos < strlen(fraseCodificada))
 			fputc(decodificar(arvoreHuffman,fraseCodificada,&pos,pos),output);
+
+		printf("%s > %s\n",argv[2],nomeOutput(argv[2],2));
 
 		fclose(arq);
 		fclose(output);
