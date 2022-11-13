@@ -16,7 +16,7 @@ int main(int argc, char** argv)
 
 	if(opt == 0)
 	{
-		printf("Uso do programa:\n./programa -c arquivo.txt\n\t  ou\n./programa -d arquivo.txt\n");
+		printf("Uso do programa:\n./programa -c arquivo.txt\n\t  ou\n./programa -d arquivo.huf\n");
 		return 1;
 	}
 

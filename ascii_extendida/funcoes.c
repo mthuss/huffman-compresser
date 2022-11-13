@@ -3,6 +3,7 @@
 #include <string.h>
 #include <math.h>
 #include "huffman.h"
+
 //Checagem de argumentos:
 //-------------------------------------------------------------------------
 int argumentos(int argc, char** argv)
@@ -289,14 +290,19 @@ void imprimeHuf(FILE* out, unsigned char* fraseCodificada, int qtdChars, int tam
 {
 	int i = 0, j = 0;
 	unsigned char binario[9];
-	fprintf(out,"HUFFMAN 1.0\n%d\n",qtdChars);
 
+	//cabeçalho desnecessário que só vai inflar o tamanho do arquivo mas tava no exemplo do trabalho
+	fprintf(out,"HUFFMAN 1.0\n%d\n",qtdChars); 
+
+	//tabela de frequencias
 	for(i = 0 ; i < 256; i++)
 		if(freq[i] > 0)
 			fprintf(out,"%c %d\n",i,freq[i]);
 
+	//tamanho real da frase codificada
 	fprintf(out,"%d\n",tamCod);
 
+	//frase codificada em conjuntos de 8 caracteres como um único byte
 	for(i = 0; i <= strlen(fraseCodificada); i+=8)
 		fputc(convert_byte(&fraseCodificada[i],8),out);
 		
