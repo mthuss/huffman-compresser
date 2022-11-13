@@ -37,6 +37,7 @@ unsigned char* nomeArquivo(unsigned char* nomeComExt)
 	if(!strrchr(nomeComExt,'.')) //se o nome não tem pontos
 		return strcpy(malloc(strlen(nomeComExt)),nomeComExt);
 
+	//descobrir em que posição (cont) da string começa a extensão
 	int cont = strlen(nomeComExt) - 1;
 	unsigned char* nomeSemExt;
 	while(nomeComExt[cont] != '.')
@@ -210,30 +211,6 @@ Arvore* arvoriza(Lista** listaArvores)
 	return (*listaArvores)->arv;
 }
 
-//Insere um código no dicionario de códigos
-void inserirCodigo(Codigo** dicionario, unsigned char* codigo, unsigned char simbolo)
-{
-	Codigo* novo = malloc(sizeof(Codigo));
-	novo->simbolo = simbolo;
-	novo->codigo = codigo;
-	novo->prox = NULL;
-
-	if(*dicionario == NULL)
-	{
-		*dicionario = novo;
-		return;
-	}
-
-	Codigo* aux = *dicionario;
-
-	while(aux->prox)
-		aux = aux->prox;
-	aux->prox = novo;
-
-
-
-}
-
 //Atribui códigos a cada um dos caracteres presentes na árvore e os insere no dicionário
 void montarDicionario(Arvore* no, unsigned char* codigo, int topo, char** dicionario)
 {
@@ -358,14 +335,4 @@ unsigned char decodificar(Arvore* no, unsigned char* frase, int* abspos, int pos
 	{
 		return decodificar(no->dir, frase, abspos, pos+1);
 	}
-}
-void imprimirCodigos(Codigo* aux)
-{
-	printf("\n\nLista de Codigos:\n");
-	while(aux)
-	{
-		printf("Simbolo: %c\tCodigo: %s\n\n",aux->simbolo,aux->codigo);
-		aux = aux->prox;
-	}
-
 }

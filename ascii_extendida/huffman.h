@@ -14,17 +14,9 @@ typedef struct lista
 	struct arvore* arv;
 	struct lista* prox;
 } Lista;
-
-typedef struct codigo
-{
-	unsigned char simbolo;
-	unsigned char* codigo;
-	struct codigo* prox;
-} Codigo;
 //--------------------------------
 
 
-void imprimirCodigos(Codigo* aux);
 int argumentos(int argc, char** argv);
 int abrirInput(FILE** arq, unsigned char* nome, int* tam, int opt);
 unsigned char* nomeArquivo(unsigned char* nomeComExt);
