@@ -63,14 +63,15 @@ int main(int argc, char** argv)
 		//abre o arquivo para escrita, 
 		//converte 8 'bits' da frase codificada em um byte
 		//e imprime no arquivo
-		output = fopen(nomeOutput(argv[2],1),"w+");
+		char* outputFilename = nomeOutput(argv[2],1);
+		output = fopen(outputFilename,"w+");
 		if(!output)
 		{
 			printf("Ocorreu um erro ao criar o arquivo de saída!!\n");
 			return 1;
 		}
 		imprimeHuf(output,fraseCodificada,qtdChars,tamCod,freq);
-		printf("%s > %s\n",argv[2],nomeOutput(argv[2],1));
+		printf("%s > %s\n",argv[2],outputFilename);
 
 
 		fclose(arq);
@@ -105,7 +106,8 @@ int main(int argc, char** argv)
 		}
 		
 		//abre o arquivo de saída e faz a descodificação da string, imprimindo-a no arquivo
-		output = fopen(nomeOutput(argv[2],2),"w+");
+		char* outputFilename = nomeOutput(argv[2],2);
+		output = fopen(outputFilename,"w+");
 		if(!output)
 		{
 			printf("Ocorreu um erro ao criar o arquivo de saída!!\n");
@@ -117,7 +119,7 @@ int main(int argc, char** argv)
 		while(pos < strlen(fraseCodificada))
 			fputc(decodificar(arvoreHuffman,fraseCodificada,&pos,pos),output);
 
-		printf("%s > %s\n",argv[2],nomeOutput(argv[2],2));
+		printf("%s > %s\n",argv[2],outputFilename);
 
 		fclose(arq);
 		fclose(output);
