@@ -72,6 +72,9 @@ int main(int argc, char** argv)
 		}
 		imprimeHuf(output,fraseCodificada,qtdChars,tamCod,freq);
 		printf("%s > %s\n",argv[2],outputFilename);
+		if(tam - ftell(output) < 0)
+			printf("\nDevido ao tamanho pequeno da frase original e da existência do cabeçalho do arquivo, o arquivo de saída acabou %d bytes maior do que o de entrada!!\n",ftell(output) - tam);
+		else printf("%d bytes economizados\n",tam - ftell(output));
 
 
 		fclose(arq);
