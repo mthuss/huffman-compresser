@@ -11,13 +11,12 @@ int argumentos(int argc, char** argv)
 	if(argc <= 2)
 	{
 		printf("Argumentos insuficientes!!\n\n");
-		printf("Uso do programa:\n./programa -c arquivo.txt\n\t  ou\n./programa -d arquivo.txt\n");
-		return 1;
+		return 0;
 	}
 	else if(argc > 3)
 	{
-		printf("Argumentos demais!!\n");
-		return 1;
+		printf("Argumentos demais!!\n\n");
+		return 0;
 	}
 
 	if(strcmp(argv[1],"--comprimir") == 0 || strcmp(argv[1],"-c") == 0)
@@ -25,7 +24,10 @@ int argumentos(int argc, char** argv)
 	else if(strcmp(argv[1],"--descomprimir") == 0 || strcmp(argv[1],"-d") == 0)
 		return 2;
 	else 
+	{
+		printf("Argumento inválido!!\n\n");
 		return 0;
+	}
 
 }
 

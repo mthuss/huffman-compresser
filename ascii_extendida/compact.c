@@ -14,15 +14,15 @@ int main(int argc, char** argv)
 
 	opt = argumentos(argc,argv);
 
-	if(!abrirInput(&arq, argv[2], &tam, opt))
-		return 1;
-
 	if(opt == 0)
 	{
-		printf("Argumento inválido!!\n\n");
 		printf("Uso do programa:\n./programa -c arquivo.txt\n\t  ou\n./programa -d arquivo.txt\n");
 		return 1;
 	}
+
+	if(!abrirInput(&arq, argv[2], &tam, opt))
+		return 1;
+
 
 	if(opt == 1) //Compressão
 	{
@@ -114,6 +114,7 @@ int main(int argc, char** argv)
 			return 1;
 		}
 
+		//"corta" fora os bits de padding da frase codificada, caso esta os possua
 		fraseCodificada[numBits] = '\0';
 
 		while(pos < strlen(fraseCodificada))
