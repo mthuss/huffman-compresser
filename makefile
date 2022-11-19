@@ -1,5 +1,5 @@
 main:
-	gcc funcoes.c compact.c -o compact -lm
+	gcc funcoes.c main.c -o main -lm
 
 clang:
-	clang funcoes.c compact.c -o compact -lm
+	clang funcoes.c main.c -o main -lm
